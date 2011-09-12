@@ -18,9 +18,13 @@
 #
 
 # install rvm api gem during chef compile phase
-gem_package 'rvm' do
-  action :nothing
-end.run_action(:install)
+begin
+  gem_package 'rvm' do
+    action :nothing
+  end.run_action(:install)
+rescue IOError
+  retry
+end
 
 require 'rubygems'
 Gem.clear_paths
