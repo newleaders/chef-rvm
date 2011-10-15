@@ -49,7 +49,7 @@ class Chef
 
           def gem_paths
             cmd = "rvm #{ruby_strings.join(',')} "
-            cmd << "#{rvm_do} #{@gem_binary_location} env gempath"
+            cmd << "#{rvm_do(user)} #{@gem_binary_location} env gempath"
 
             if user
               user_dir    = Etc.getpwnam(user).dir
@@ -69,7 +69,7 @@ class Chef
 
           def gem_platforms
             cmd = "rvm #{ruby_strings.join(',')} "
-            cmd << "#{rvm_do} #{@gem_binary_location} env"
+            cmd << "#{rvm_do(user)} #{@gem_binary_location} env"
 
             if user
               user_dir    = Etc.getpwnam(user).dir
@@ -144,7 +144,7 @@ class Chef
             name = @new_resource.source
           end
 
-          cmd = %{rvm #{ruby_strings.join(',')} #{rvm_do} #{gem_binary_path}}
+          cmd = %{rvm #{ruby_strings.join(',')} #{rvm_do(new_resource.user)} #{gem_binary_path}}
           cmd << %{ install #{name} -q --no-rdoc --no-ri -v "#{version}"}
           cmd << %{#{src}#{opts}}
 
@@ -164,7 +164,7 @@ class Chef
         end
 
         def uninstall_via_gem_command(name, version)
-          cmd = %{rvm #{ruby_strings.join(',')} #{rvm_do} #{gem_binary_path}}
+          cmd = %{rvm #{ruby_strings.join(',')} #{rvm_do(new_resource.user)} #{gem_binary_path}}
           cmd << %{ uninstall #{name} -q -x -I}
           if version
             cmd << %{ -v "#{version}"#{opts}}
